@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Creativestyle_StockUpdater>
+      <version>0.1.0</version>
+    </Creativestyle_StockUpdater>
+  </modules>
+  <global>
+    <helpers>
+      <stockupdater>
+        <class>Creativestyle_StockUpdater_Helper</class>
+      </stockupdater>
+    </helpers>
+	<blocks>
+	  <stockupdater>
+		<class>Creativestyle_StockUpdater_Block</class>
+	  </stockupdater>
+	</blocks>
+  </global>
+   <admin>
+  <routers>
+    <stockupdater>
+      <use>admin</use>
+    <args>
+      <module>Creativestyle_StockUpdater</module>
+      <frontName>stockupdater</frontName>
+    </args>
+    </stockupdater>
+  </routers>
+  </admin>
+ <adminhtml>
+  <menu>
+    <catalog>
+    <children>
+      <stockupdaterbackend module="stockupdater">
+      <title>StockUpdater</title>
+      <sort_order>9999999</sort_order>
+      <action>stockupdater/adminhtml_stockupdaterbackend</action>
+      </stockupdaterbackend>
+    </children>
+    </catalog>
+  </menu>
+  <acl>
+    <resources>
+    <all>
+      <title>Allow Everything</title>
+    </all>
+    <admin>
+      <children>
+      <stockupdater translate="title" module="stockupdater">
+        <title>StockUpdater</title>
+        <sort_order>1000</sort_order>
+        <children>
+      <stockupdaterbackend translate="title">
+      <title>StockUpdater</title>
+      </stockupdaterbackend>
+        </children>
+      </stockupdater>
+      </children>
+    </admin>
+    </resources>
+  </acl>
+  <layout>
+    <updates>
+    <stockupdater>
+      <file>stockupdater.xml</file>
+    </stockupdater>
+    </updates>
+  </layout>
+  </adminhtml>
+</config>
