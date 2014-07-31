@@ -11,6 +11,10 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
     }
 
 
+    //
+    // Retrieve post action from form
+    //
+
     public function postAction() {
 
     	if(isset($_POST['exportcsv'])){
@@ -26,11 +30,20 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
 
     }
 
+    //
+    // Get Collection and pass it to save CSV
+    //
+
     private function exportCSV() {
 
     	$collection = $this->_getProductCollection();
     	$this->saveCSVfile($collection);
     }
+
+    //
+    // Get uploded .csv file and save it in /media dir
+    // and passit to read.
+    //
 
     private function importCSV($uploader) {
   		$path = Mage::getBaseDir('media');
@@ -42,6 +55,10 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
   		$this->readCsvFile($path,$fileName);
     }
 
+    //
+    // Read from .CSV file and pass data to update
+    //
+
     private function readCsvFile($path,$file) {
 		$csv = new Varien_File_Csv();
 		$csv->setDelimiter(';');
@@ -49,6 +66,10 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
 
 		$this->updateProducts($data);
     }
+
+    //
+    // Save .csv with exported $collection
+    //
 
     private function saveCSVFile($collection) {
     	$date = date('Y-m-d');
@@ -68,6 +89,10 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
     	$this->addMsg('success',$link);
 
     }
+
+    //
+    // Create .csv download link
+    //
 
     protected function getDownloadLink($file_path) {
     	$link = '<a href="'.$file_path.'"> Download link </a>';
@@ -91,6 +116,10 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
     	return $data;
     }
 
+    //
+    // Add session msg
+    //
+
     private function addMsg($type,$msg) {
     	$text = $this->__($msg);
 	    switch ($type) {
@@ -104,12 +133,19 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
     }
 
 
+    //
+    // Update product
+    //
 
     private function updateProducts($data) {
     	foreach ($data as $_data) {
     		$this->updateProduct($_data,$data);
     	}
     }
+
+    //
+    // Check 'is_in_stock' for configurable products and his childs
+    //
 
     private function checkConfigurable($_product,$data) {
 
@@ -129,6 +165,10 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
         }
         return $status;
     }
+
+    //
+    // Update one product
+    //
 
     private function updateProduct($data,$fulldata){
 		$_product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data[0]);
@@ -156,6 +196,10 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
         }
 		$_product->save();
     }
+
+    //
+    // get all the products for saveing .csv
+    //
 
     protected function _getProductCollection()
 	{
