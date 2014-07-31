@@ -55,7 +55,7 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
     	$fileName = 'productStockData_'.$date.'.csv';
     	$file_path = Mage::getBaseDir('media').'/'.$fileName;
     	$mage_csv = new Varien_File_Csv();
-    	$mage_csv->setDelimiter(',');
+    	$mage_csv->setDelimiter(';');
     	$mage_csv->setEnclosure('');
 
     	$data = $this->getProductData($collection);
@@ -107,20 +107,53 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
 
     private function updateProducts($data) {
     	foreach ($data as $_data) {
-    		$this->updateProduct($_data);
+    		$this->updateProduct($_data,$data);
     	}
     }
 
-    private function updateProduct($data){
+    private function checkConfigurable($_product,$data) {
+
+        $conf = Mage::getModel('catalog/product_type_configurable')->setProduct($_product);
+        $simple_collection = $conf->getUsedProductCollection()->addAttributeToSelect('*')->addFilterByRequiredOptions();
+
+        $status='0';
+
+        foreach($data as $_data) {
+            if($status=='1'){ break; }
+          foreach($simple_collection as $simple_product) {
+            if($simple_product->getSku() == $_data[0] && $_data[2] == '1') {
+                $status='1';
+                break;
+            }
+          }
+        }
+        return $status;
+    }
+
+    private function updateProduct($data,$fulldata){
 		$_product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data[0]);
+
 		if(!$_product) {
 			$errormsg = 'Product of sku: '.$data[0].' doesnt exist.';
 			$this->addMsg('error',$errormsg); return;
 		}
-		$stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product->getId());
+
+        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product->getId());
+
+        if($_product->getTypeId()=='configurable') {
+            $status = $this->checkConfigurable($_product,$fulldata);
+            $stockItem->setData('qty',$data[1]);
+            if($status == '0') {
+                $stockItem->setData('is_in_stock','0');
+            } elseif($status == '1') {
+                $stockItem->setData('is_in_stock','1');
+            }
+            $stockItem->save();
+        } else {
 		$stockItem->setData('qty',$data[1]);
 		$stockItem->setData('is_in_stock',$data[2]);
 		$stockItem->save();
+        }
 		$_product->save();
     }
 
@@ -130,6 +163,7 @@ class Creativestyle_StockUpdater_Adminhtml_StockupdaterbackendController extends
 							->addAttributeToSelect('*');
     return $collection;
 	}
+
 
 
 }
