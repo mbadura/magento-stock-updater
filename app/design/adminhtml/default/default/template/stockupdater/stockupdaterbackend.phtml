@@ -1,0 +1,50 @@
+<?php $url = Mage::helper('adminhtml')->getUrl('stockupdater/adminhtml_stockupdaterbackend/post'); ?> 
+
+<div class="content-header">
+    <table cellspacing="0" class="grid-header">
+        <tr>
+            <td><h3><?=$this->__('Welcome to Creativestyle Stock Updater')?></h3></td>
+        </tr>
+    </table>
+</div>
+
+<div class="entry-edit">
+	<form action="<?php echo $url; ?>" method="POST" enctype="multipart/form-data" name="importcsv">
+	<?php echo $this->getBlockHtml('formkey'); ?>
+        <h4 class="icon-head head-edit-form fieldset-legend"><?=$this->__('Update Stock Data')?></h4>
+        <fieldset id="my-fieldset">
+            <table cellspacing="0" class="form-list">
+                <tr>
+                    <td class="input-ele"><label for="slqquery">Please select if you want to do SQL way</label></td>
+                    <td class="input-ele"><input type="checkbox" name="sqlquery" /></td>
+                </tr>
+                <tr>
+                	<td>&nbsp;</td>
+              	</tr>
+                <tr>
+                    <td class="input-ele"><input type="file" name="csvfile" id="file"></td>
+                </tr>
+                <tr>
+                	<td>&nbsp;</td>
+              	</tr>
+                <tr>
+                	<td><button type="submit" name="importcsv" class="show-hide"><span>Update products</span></button></td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+</div>
+
+<div class="entry-edit">
+	<form action="<?php echo $url; ?>" method="POST" enctype="multipart/form-data" name="exportcsv">
+	<?php echo $this->getBlockHtml('formkey'); ?>
+        <h4 class="icon-head head-edit-form fieldset-legend"><?=$this->__('Export Stock Data')?></h4>
+        <fieldset id="my-fieldset">
+            <table cellspacing="0" class="form-list">
+                <tr>
+                	<td><button type="submit" name="exportcsv" class="go"><span>Export product .CSV</span></button></td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+</div>
