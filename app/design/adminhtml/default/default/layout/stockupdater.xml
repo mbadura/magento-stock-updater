@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  <stockupdater_adminhtml_stockupdaterbackend_index>
+	<reference name="content">
+	  <block type="stockupdater/adminhtml_stockupdaterbackend" name="stockupdaterbackend" template="stockupdater/stockupdaterbackend.phtml">
+            <block type="adminhtml/catalog_product" name="products_list"></block>
+	  </block>
+	</reference>
+  </stockupdater_adminhtml_stockupdaterbackend_index>
+</layout>
