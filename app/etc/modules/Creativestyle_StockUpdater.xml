@@ -3,7 +3,7 @@
   <modules>
     <Creativestyle_StockUpdater>
       <active>true</active>
-      <codePool>local</codePool>
+      <codePool>community</codePool>
       <version>0.1.0</version>
     </Creativestyle_StockUpdater>
   </modules>
